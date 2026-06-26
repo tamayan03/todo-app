@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ToDo登録・更新</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    background:#f5f7fa;
+    font-family:Arial, sans-serif;
+}
+
+.container{
+
+    width:650px;
+
+    margin:50px auto;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+h2{
+
+    text-align:center;
+
+    color:#333;
+
+    margin-bottom:30px;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+th{
+
+    width:140px;
+
+    text-align:left;
+
+    padding:15px;
+
+    background:#f0f4f8;
+}
+
+td{
+
+    padding:15px;
+}
+
+input[type=text]{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    box-sizing:border-box;
+
+    font-size:15px;
+}
+
+textarea{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    box-sizing:border-box;
+
+    resize:vertical;
+
+    font-size:15px;
+}
+
+.checkbox{
+
+    transform:scale(1.2);
+
+    margin-right:8px;
+}
+
+button{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:25px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#4CAF50;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+button:hover{
+
+    background:#43A047;
+}
+
+.back{
+
+    display:block;
+
+    text-align:center;
+
+    margin-top:25px;
+
+    text-decoration:none;
+
+    color:#1976D2;
+
+    font-weight:bold;
+}
+
+.back:hover{
+
+    text-decoration:underline;
+}
+
+.error{
+
+    color:red;
+
+    margin-top:5px;
+
+    font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>ToDo登録・更新</h2>
+
+<form th:action="@{/todos/save}"
+      th:object="${todoForm}"
+      method="post">
+
+    <input type="hidden" th:field="*{id}">
+    <input type="hidden" th:field="*{isNew}">
+
+    <table>
+
+        <tr>
+
+            <th> タイトル</th>
+
+            <td>
+
+                <input
+                    type="text"
+                    th:field="*{todo}"
+                    placeholder="タイトルを入力">
+
+                <div
+                    class="error"
+                    th:if="${#fields.hasErrors('todo')}"
+                    th:errors="*{todo}">
+                </div>
+
+            </td>
+
+        </tr>
+
+        <tr>
+			
+			<tr>
+			    <th>締切日</th>
+			    <td>
+			        <input type="date"
+			               th:field="*{dueDate}">
+			    </td>
+			</tr>
+
+            <th>詳細</th>
+
+            <td>
+
+                <textarea
+                    th:field="*{detail}"
+                    rows="6"
+                    placeholder="詳細を入力してください">
+                </textarea>
+
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <th>状態</th>
+
+            <td>
+
+                <label>
+
+                    <input
+                        class="checkbox"
+                        type="checkbox"
+                        th:field="*{isCompleted}">
+
+                    完了
+
+                </label>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+    <button
+        type="submit"
+        th:text="${todoForm.isNew} ? '登録する' : ' 更新する'">
+    </button>
+
+</form>
+
+<a
+   class="back"
+   th:href="@{/todos}">
+    ← 一覧へ戻る
+</a>
+
+</div>
+
+</body>
+</html>

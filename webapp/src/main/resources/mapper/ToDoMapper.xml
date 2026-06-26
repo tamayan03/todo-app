@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.webapp.repository.ToDoMapper">
+
+    <!-- 全件検索 -->
+    <select id="selectAll"
+            resultType="com.example.webapp.entity.ToDo">
+
+        SELECT
+            id,
+            todo,
+            detail,
+            created_at AS createdAt,
+            updated_at AS updatedAt,
+            is_completed AS isCompleted,
+            due_date AS dueDate
+        FROM todos
+
+    </select>
+
+    <!-- 1件検索 -->
+    <select id="selectById"
+            resultType="com.example.webapp.entity.ToDo">
+
+        SELECT
+            id,
+            todo,
+            detail,
+            created_at AS createdAt,
+            updated_at AS updatedAt,
+            is_completed AS isCompleted,
+            due_date AS dueDate
+        FROM todos
+        WHERE id = #{id}
+
+    </select>
+
+    <!-- 登録 -->
+    <insert id="insert">
+
+        INSERT INTO todos
+        (
+            todo,
+            detail,
+            created_at,
+            updated_at,
+            is_completed,
+            due_date
+        )
+
+        VALUES
+        (
+            #{todo},
+            #{detail},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP,
+            false,
+            #{dueDate}
+        )
+
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update">
+
+        UPDATE todos
+
+        SET
+            todo = #{todo},
+
+            detail = #{detail},
+
+            is_completed = #{isCompleted},
+            
+            due_date = #{dueDate},
+
+            updated_at = CURRENT_TIMESTAMP
+
+        WHERE id = #{id}
+
+    </update>
+
+    <!-- 削除 -->
+    <delete id="delete">
+
+        DELETE FROM todos
+
+        WHERE id = #{id}
+
+    </delete>
+
+    <!-- タイトル検索 -->
+    <select id="selectByTodo"
+            resultType="com.example.webapp.entity.ToDo">
+
+        SELECT
+
+            id,
+
+            todo,
+
+            detail,
+
+            created_at AS createdAt,
+
+            updated_at AS updatedAt,
+
+            is_completed AS isCompleted,
+            
+            due_date AS dueDate
+
+        FROM todos
+
+        WHERE todo LIKE '%' || #{keyword} || '%'
+
+    </select>
+    
+    <!-- 達成済み件数取得 -->
+<select id="getCompletedCount"
+        resultType="int">
+
+    SELECT COUNT(*)
+
+    FROM todos
+
+    WHERE is_completed = true
+
+</select>
+
+</mapper>

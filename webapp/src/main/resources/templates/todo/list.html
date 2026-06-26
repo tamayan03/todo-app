@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>ToDo一覧</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Yu Gothic",sans-serif;
+    background:#f4f6f9;
+    padding:40px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.search-area{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.search-area input{
+    flex:1;
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+.search-area button{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#4f46e5;
+    color:white;
+    cursor:pointer;
+}
+
+.search-area button:hover{
+    background:#4338ca;
+}
+
+.message{
+    margin-bottom:15px;
+    padding:10px;
+    border-radius:8px;
+}
+
+.success{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.error{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.add-button{
+    display:inline-block;
+    margin-bottom:20px;
+    padding:10px 20px;
+    background:#10b981;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+}
+
+.add-button:hover{
+    background:#059669;
+}
+
+.aquarium{
+
+    margin:20px 0;
+
+    padding:20px;
+
+    border-radius:16px;
+
+    background:linear-gradient(
+        135deg,
+        #dbeafe,
+        #bfdbfe
+    );
+
+    text-align:center;
+
+}
+
+.aquarium h3{
+
+    font-size:28px;
+
+}
+
+.aquarium h2{
+
+    font-size:40px;
+
+    margin:15px 0;
+
+}
+
+.aquarium p{
+
+    font-size:18px;
+
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#4f46e5;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+}
+
+tr:hover{
+    background:#f8fafc;
+}
+
+.action-link{
+    text-decoration:none;
+    color:#4f46e5;
+    font-weight:bold;
+}
+
+.action-link:hover{
+    text-decoration:underline;
+}
+
+button{
+    padding:8px 14px;
+    border:none;
+    border-radius:8px;
+    background:#10b981;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#059669;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>ToDo一覧</h2>
+
+    <form th:action="@{/todos/search}"
+          method="get"
+          class="search-area">
+
+        <input
+            type="text"
+            name="keyword"
+            placeholder="タイトル検索"
+            th:value="${keyword}">
+
+        <button type="submit">
+
+            検索
+
+        </button>
+
+    </form>
+
+    <!-- 🐠タスク水族館 -->
+
+    <div class="aquarium">
+
+        <h3>🐠 タスク水族館</h3>
+
+        <h2 th:text="${aquarium}"></h2>
+
+        <p>
+
+            達成数：
+
+            <span th:text="${completedCount}"></span>
+
+            件
+
+        </p>
+
+    </div>
+
+    <p th:if="${errorMessage}"
+       th:text="${errorMessage}"
+       class="message error">
+
+    </p>
+
+    <p th:if="${message}"
+       th:text="${message}"
+       class="message success">
+
+    </p>
+
+    <a th:href="@{/todos/add}"
+       class="add-button">
+
+        ＋ 新規登録
+
+    </a>
+
+    <table>
+
+        <thead>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>状態</th>
+
+            <th>ToDo</th>
+			
+			<th>締切日</th>
+
+            <th>詳細</th>
+
+            <th>完了</th>
+			
+            <th>編集</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+			<tr th:each="todo : ${todos}">
+
+			    <td th:text="${todo.id}"></td>
+
+			    <td>
+			        <span
+			            th:text="${todo.isCompleted != null && todo.isCompleted ? '☑ 完了' : '☒ 未完了'}">
+			        </span>
+			    </td>
+
+			    <td th:text="${todo.todo}"></td>
+			    <td>
+
+			        <span
+			            th:if="${todo.dueDate != null}"
+			            th:text="${#temporals.format(todo.dueDate, 'yyyy/MM/dd')}">
+			        </span>
+
+			        <span
+			            th:if="${todo.dueDate == null}">
+			            －
+			        </span>
+
+			    </td>
+
+				<td>
+				    <a
+				        th:href="@{/todos/{id}(id=${todo.id})}"
+				        class="action-link">
+				        詳細
+				    </a>
+				</td>
+
+				<td>
+
+				    <form
+				        th:if="${todo.isCompleted == null || !todo.isCompleted}"
+				        th:action="@{/todos/complete/{id}(id=${todo.id})}"
+				        method="post">
+
+				        <button type="submit">
+				            完了
+				        </button>
+
+				    </form>
+
+				    <span
+				        th:if="${todo.isCompleted}">
+				        ✔
+				    </span>
+
+				</td>
+
+				<td>
+
+				    <a
+				        th:href="@{/todos/edit/{id}(id=${todo.id})}"
+				        class="action-link">
+				        編集
+				    </a>
+
+				</td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+
+</html>
