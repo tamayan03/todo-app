@@ -175,35 +175,49 @@ button:hover{
 
     <table>
 
-        <tr>
+		<tr>
 
-            <th> タイトル</th>
+		    <th>タイトル</th>
 
-            <td>
+		    <td>
 
-                <input
-                    type="text"
-                    th:field="*{todo}"
-                    placeholder="タイトルを入力">
+		        <input
+		            type="text"
+		            th:field="*{todo}"
+		            placeholder="タイトルを入力">
 
-                <div
-                    class="error"
-                    th:if="${#fields.hasErrors('todo')}"
-                    th:errors="*{todo}">
-                </div>
+		        <div
+		            class="error"
+		            th:if="${#fields.hasErrors('todo')}"
+		            th:errors="*{todo}">
+		        </div>
 
-            </td>
+		    </td>
 
-        </tr>
+		</tr>
+		
+		
 
         <tr>
 			
 			<tr>
+
 			    <th>締切日</th>
+
 			    <td>
-			        <input type="date"
-			               th:field="*{dueDate}">
+
+			        <input
+			            type="date"
+			            th:field="*{dueDate}">
+
+			        <div
+			            class="error"
+			            th:if="${#fields.hasErrors('dueDate')}"
+			            th:errors="*{dueDate}">
+			        </div>
+
 			    </td>
+
 			</tr>
 
             <th>詳細</th>
@@ -240,6 +254,8 @@ button:hover{
             </td>
 
         </tr>
+		
+		
 
     </table>
 

@@ -40,6 +40,11 @@ public interface ToDoService {
     
     int getCompletedCount();
     
+    /**
+     * 同名の未完了タスクを検索
+     */
+    ToDo findDuplicateTodo(String todo);
+    
 
 }
 

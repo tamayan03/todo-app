@@ -29,8 +29,11 @@ public class ToDo {
 
 	/** 完了状態 */
 	private Boolean isCompleted;
-	
+
 	/** 締切日 */
 	private LocalDate dueDate;
+
+	/** 削除フラグ（0:有効 1:削除） */
+	private Integer deleteFlag;
 
 }

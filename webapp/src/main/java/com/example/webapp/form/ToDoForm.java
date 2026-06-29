@@ -24,19 +24,29 @@ public class ToDoForm {
 
     public ToDoForm() {
     }
+    
+    /** 完了状態 */
+    private Boolean isCompleted;
+
+    /** 削除フラグ */
+    private Integer deleteFlag;
 
     public ToDoForm(
             Integer id,
             String todo,
             String detail,
             Boolean isCompleted,
-            Boolean isNew
+            Boolean isNew,
+            LocalDate dueDate,
+            Integer deleteFlag
     ) {
         this.id = id;
         this.todo = todo;
         this.detail = detail;
         this.isCompleted = isCompleted;
         this.isNew = isNew;
+        this.dueDate = dueDate;
+        this.deleteFlag = deleteFlag;
     }
 
     public Integer getId() {
@@ -62,9 +72,6 @@ public class ToDoForm {
     public void setDetail(String detail) {
         this.detail = detail;
     }
-    
-    /** 完了状態 */
-    private Boolean isCompleted;
 
     public Boolean getIsNew() {
         return isNew;
@@ -88,5 +95,13 @@ public class ToDoForm {
     
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
+    }
+    
+    public Integer getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Integer deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 }

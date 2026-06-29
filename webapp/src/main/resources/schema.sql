@@ -16,6 +16,8 @@ CREATE TABLE todos(
 
     is_completed BOOLEAN DEFAULT false,
 
-    due_date DATE
+	due_date DATE,
+
+	delete_flag INTEGER DEFAULT 0
 
 );

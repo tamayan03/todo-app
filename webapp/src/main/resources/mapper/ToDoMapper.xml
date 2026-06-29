@@ -16,27 +16,32 @@
             created_at AS createdAt,
             updated_at AS updatedAt,
             is_completed AS isCompleted,
-            due_date AS dueDate
+			due_date AS dueDate,
+			delete_flag AS deleteFlag
         FROM todos
+        WHERE delete_flag = 0
 
     </select>
 
     <!-- 1件検索 -->
     <select id="selectById"
-            resultType="com.example.webapp.entity.ToDo">
+        resultType="com.example.webapp.entity.ToDo">
 
-        SELECT
-            id,
-            todo,
-            detail,
-            created_at AS createdAt,
-            updated_at AS updatedAt,
-            is_completed AS isCompleted,
-            due_date AS dueDate
-        FROM todos
-        WHERE id = #{id}
+    SELECT
+        id,
+        todo,
+        detail,
+        created_at AS createdAt,
+        updated_at AS updatedAt,
+        is_completed AS isCompleted,
+        due_date AS dueDate,
+        delete_flag AS deleteFlag
+    FROM todos
 
-    </select>
+    WHERE id = #{id}
+      AND delete_flag = 0
+
+</select>
 
     <!-- 登録 -->
     <insert id="insert">
@@ -48,7 +53,8 @@
             created_at,
             updated_at,
             is_completed,
-            due_date
+            due_date,
+            delete_flag
         )
 
         VALUES
@@ -58,7 +64,8 @@
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP,
             false,
-            #{dueDate}
+            #{dueDate},
+            0
         )
 
     </insert>
@@ -70,51 +77,46 @@
 
         SET
             todo = #{todo},
-
             detail = #{detail},
-
-            is_completed = #{isCompleted},
-            
+            is_completed = #{isCompleted},           
             due_date = #{dueDate},
-
+            delete_flag = #{deleteFlag},
             updated_at = CURRENT_TIMESTAMP
-
         WHERE id = #{id}
 
     </update>
 
     <!-- 削除 -->
-    <delete id="delete">
+    <update id="delete">
 
-        DELETE FROM todos
+    UPDATE todos
 
-        WHERE id = #{id}
+    SET
+        delete_flag = 1,
+        updated_at = CURRENT_TIMESTAMP
 
-    </delete>
+    	WHERE id = #{id}
+
+	</update>
 
     <!-- タイトル検索 -->
     <select id="selectByTodo"
             resultType="com.example.webapp.entity.ToDo">
 
         SELECT
-
             id,
-
             todo,
-
             detail,
-
             created_at AS createdAt,
-
             updated_at AS updatedAt,
-
-            is_completed AS isCompleted,
-            
-            due_date AS dueDate
+            is_completed AS isCompleted,            
+            due_date AS dueDate,
+            delete_flag AS deleteFlag
 
         FROM todos
 
         WHERE todo LIKE '%' || #{keyword} || '%'
+        AND delete_flag = 0
 
     </select>
     
@@ -127,6 +129,31 @@
     FROM todos
 
     WHERE is_completed = true
+    AND delete_flag = 0
+
+</select>
+
+<!-- タイトル重複チェック -->
+<select id="selectDuplicateTodo"
+        resultType="com.example.webapp.entity.ToDo">
+
+    SELECT
+        id,
+        todo,
+        detail,
+        created_at AS createdAt,
+        updated_at AS updatedAt,
+        is_completed AS isCompleted,
+        due_date AS dueDate,
+        delete_flag AS deleteFlag
+
+    FROM todos
+
+    WHERE todo = #{todo}
+      AND is_completed = false
+      AND delete_flag = 0
+
+    LIMIT 1
 
 </select>
 

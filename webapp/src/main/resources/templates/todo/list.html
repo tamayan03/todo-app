@@ -263,9 +263,14 @@ button:hover{
 
         </thead>
 
-        <tbody>
+			<tbody>
 
-			<tr th:each="todo : ${todos}">
+			<tr th:each="todo : ${todos}"
+			    th:style="${todo.dueDate != null
+			            and todo.dueDate.isBefore(T(java.time.LocalDate).now())
+			            and (todo.isCompleted == null or !todo.isCompleted)}
+			            ? 'background-color:#ffebee;'
+			            : ''">
 
 			    <td th:text="${todo.id}"></td>
 
@@ -276,63 +281,64 @@ button:hover{
 			    </td>
 
 			    <td th:text="${todo.todo}"></td>
+
 			    <td>
 
 			        <span
 			            th:if="${todo.dueDate != null}"
-			            th:text="${#temporals.format(todo.dueDate, 'yyyy/MM/dd')}">
+			            th:text="${#temporals.format(todo.dueDate,'yyyy/MM/dd')}"
+			            th:style="${todo.dueDate.isBefore(T(java.time.LocalDate).now())
+			                    and (todo.isCompleted == null || !todo.isCompleted)}
+			                    ? 'color:red;font-weight:bold;'
+			                    : ''">
 			        </span>
 
-			        <span
-			            th:if="${todo.dueDate == null}">
+			        <span th:if="${todo.dueDate == null}">
 			            －
 			        </span>
 
 			    </td>
 
-				<td>
-				    <a
-				        th:href="@{/todos/{id}(id=${todo.id})}"
-				        class="action-link">
-				        詳細
-				    </a>
-				</td>
+			    <td>
+			        <a
+			            th:href="@{/todos/{id}(id=${todo.id})}"
+			            class="action-link">
+			            詳細
+			        </a>
+			    </td>
 
-				<td>
+			    <td>
 
-				    <form
-				        th:if="${todo.isCompleted == null || !todo.isCompleted}"
-				        th:action="@{/todos/complete/{id}(id=${todo.id})}"
-				        method="post">
+			        <form
+			            th:if="${todo.isCompleted == null || !todo.isCompleted}"
+			            th:action="@{/todos/complete/{id}(id=${todo.id})}"
+			            method="post">
 
-				        <button type="submit">
-				            完了
-				        </button>
+			            <button type="submit">
+			                完了
+			            </button>
 
-				    </form>
+			        </form>
 
-				    <span
-				        th:if="${todo.isCompleted}">
-				        ✔
-				    </span>
+			        <span th:if="${todo.isCompleted}">
+			            ✔
+			        </span>
 
-				</td>
+			    </td>
 
-				<td>
+			    <td>
 
-				    <a
-				        th:href="@{/todos/edit/{id}(id=${todo.id})}"
-				        class="action-link">
-				        編集
-				    </a>
+			        <a
+			            th:href="@{/todos/edit/{id}(id=${todo.id})}"
+			            class="action-link">
+			            編集
+			        </a>
 
-				</td>
+			    </td>
 
-        </tr>
+			</tr>
 
-        </tbody>
-
-    </table>
+			</tbody>
 
 </div>
 

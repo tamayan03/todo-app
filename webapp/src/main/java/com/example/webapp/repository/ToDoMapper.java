@@ -29,7 +29,7 @@ public interface ToDoMapper {
      * 「すること」を更新
      */
     void update(ToDo todo);
-
+    
     /**
      * 指定されたIDの「すること」を削除
      */
@@ -44,5 +44,10 @@ public interface ToDoMapper {
      * 達成済み件数を取得
      */
     int getCompletedCount();
+    
+    /**
+     * 同名の未完了タスクを取得
+     */
+    ToDo selectDuplicateTodo(@Param("todo") String todo);
 
 }

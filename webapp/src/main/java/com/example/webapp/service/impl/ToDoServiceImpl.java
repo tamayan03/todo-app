@@ -2,6 +2,8 @@ package com.example.webapp.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,67 +18,114 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ToDoServiceImpl implements ToDoService {
 
-	/** DI */
-	private final ToDoMapper toDoMapper;
+    /** DI */
+    private final ToDoMapper toDoMapper;
 
-	@Override
-	public List<ToDo> findAllToDo() {
+    /** ロガー */
+    private static final Logger logger = LoggerFactory.getLogger(ToDoServiceImpl.class);
 
-		return toDoMapper.selectAll();
+    @Override
+    public List<ToDo> findAllToDo() {
 
-	}
+        logger.info("ToDo一覧取得開始");
 
-	@Override
-	public ToDo findByIdToDo(Integer id) {
+        List<ToDo> todos = toDoMapper.selectAll();
 
-		return toDoMapper.selectById(id);
+        logger.info("ToDo一覧取得終了 件数={}", todos.size());
 
-	}
+        return todos;
+    }
 
-	@Override
-	public void insertToDo(ToDo toDo) {
+    @Override
+    public ToDo findByIdToDo(Integer id) {
 
-		toDoMapper.insert(toDo);
+        logger.info("ToDo取得開始 id={}", id);
 
-	}
+        ToDo todo = toDoMapper.selectById(id);
 
-	@Override
-	public void updateToDo(ToDo toDo) {
+        logger.info("ToDo取得終了 id={}", id);
 
-		toDoMapper.update(toDo);
+        return todo;
+    }
 
-	}
+    @Override
+    public void insertToDo(ToDo toDo) {
 
-	@Override
-	public void deleteToDo(Integer id) {
+        logger.info("ToDo登録開始 title={}", toDo.getTodo());
 
-		toDoMapper.delete(id);
+        toDoMapper.insert(toDo);
 
-	}
+        logger.info("ToDo登録終了");
+    }
 
-	@Override
-	public List<ToDo> findByTodo(String keyword) {
+    @Override
+    public void updateToDo(ToDo toDo) {
 
-		return toDoMapper.selectByTodo(keyword);
+        logger.info("ToDo更新開始 id={}", toDo.getId());
 
-	}
+        toDoMapper.update(toDo);
 
-	@Override
-	public void complete(Integer id) {
+        logger.info("ToDo更新終了 id={}", toDo.getId());
+    }
 
-		ToDo todo = toDoMapper.selectById(id);
+    @Override
+    public void deleteToDo(Integer id) {
 
-		todo.setIsCompleted(true);
+        logger.info("ToDo削除開始 id={}", id);
 
-		toDoMapper.update(todo);
+        toDoMapper.delete(id);
 
-	}
-	
-	@Override
-	public int getCompletedCount() {
+        logger.info("ToDo削除終了 id={}", id);
+    }
 
-	    return toDoMapper.getCompletedCount();
+    @Override
+    public List<ToDo> findByTodo(String keyword) {
 
-	}
+        logger.info("タイトル検索開始 keyword={}", keyword);
+
+        List<ToDo> todos = toDoMapper.selectByTodo(keyword);
+
+        logger.info("タイトル検索終了 件数={}", todos.size());
+
+        return todos;
+    }
+
+    @Override
+    public void complete(Integer id) {
+
+        logger.info("完了処理開始 id={}", id);
+
+        ToDo todo = toDoMapper.selectById(id);
+
+        todo.setIsCompleted(true);
+
+        toDoMapper.update(todo);
+
+        logger.info("完了処理終了 id={}", id);
+    }
+
+    @Override
+    public int getCompletedCount() {
+
+        logger.info("完了件数取得開始");
+
+        int count = toDoMapper.getCompletedCount();
+
+        logger.info("完了件数取得終了 件数={}", count);
+
+        return count;
+    }
+    
+    @Override
+    public ToDo findDuplicateTodo(String todo) {
+
+        logger.info("タイトル重複チェック開始 title={}", todo);
+
+        ToDo duplicateTodo = toDoMapper.selectDuplicateTodo(todo);
+
+        logger.info("タイトル重複チェック終了");
+
+        return duplicateTodo;
+    }
 
 }
