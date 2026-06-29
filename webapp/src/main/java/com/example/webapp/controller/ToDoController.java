@@ -113,7 +113,6 @@ public class ToDoController {
 
         ToDoForm form = new ToDoForm();
         form.setIsNew(true);
-
         model.addAttribute("todoForm", form);
 
         return "todo/form";
