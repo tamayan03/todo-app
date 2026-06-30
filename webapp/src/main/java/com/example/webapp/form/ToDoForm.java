@@ -21,6 +21,9 @@ public class ToDoForm {
     
     /** 締切日 */
     private LocalDate dueDate;
+    
+    /** カテゴリ */
+    private String category;
 
     public ToDoForm() {
     }
@@ -38,6 +41,7 @@ public class ToDoForm {
             Boolean isCompleted,
             Boolean isNew,
             LocalDate dueDate,
+            String category,
             Integer deleteFlag
     ) {
         this.id = id;
@@ -46,6 +50,7 @@ public class ToDoForm {
         this.isCompleted = isCompleted;
         this.isNew = isNew;
         this.dueDate = dueDate;
+        this.category = category;
         this.deleteFlag = deleteFlag;
     }
 
@@ -103,5 +108,13 @@ public class ToDoForm {
 
     public void setDeleteFlag(Integer deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+    
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

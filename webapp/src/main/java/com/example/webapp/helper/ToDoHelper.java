@@ -15,6 +15,7 @@ public class ToDoHelper {
 	    todo.setDetail(form.getDetail());
 	    todo.setIsCompleted(form.getIsCompleted());
 	    todo.setDueDate(form.getDueDate());
+	    todo.setCategory(form.getCategory());
 	    todo.setDeleteFlag(form.getDeleteFlag());
 	    return todo;
 	}
@@ -31,6 +32,7 @@ public class ToDoHelper {
 		//更新画面設定
 		form.setIsNew(false);
 		form.setDueDate(todo.getDueDate());
+		form.setCategory(todo.getCategory());
 		form.setDeleteFlag(todo.getDeleteFlag());
 		return form;
 	}

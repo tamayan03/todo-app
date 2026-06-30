@@ -281,6 +281,8 @@ button:hover{
             <th>ID</th>
 
             <th>状態</th>
+			
+			<th>カテゴリ</th>
 
             <th>ToDo</th>
 			
@@ -312,6 +314,8 @@ button:hover{
 			            th:text="${todo.isCompleted != null && todo.isCompleted ? '☑ 完了' : '☒ 未完了'}">
 			        </span>
 			    </td>
+				
+				<td th:text="${todo.category != null && !todo.category.isEmpty() ? todo.category : '未分類'}"></td>
 
 			    <td th:text="${todo.todo}"></td>
 
