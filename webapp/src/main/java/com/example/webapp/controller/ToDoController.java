@@ -55,13 +55,17 @@ public class ToDoController {
      * 一覧表示
      */
     @GetMapping
-    public String list(Model model) {
+    public String list(String sort,Model model) {
     	
     	logger.info("ToDo一覧表示開始");
 
         model.addAttribute(
             "todos",
-            toDoService.findAllToDo());
+            toDoService.findAllToDo(sort));
+        
+        model.addAttribute(
+                "sort",
+                sort);
 
         int completedCount =
                 toDoService.getCompletedCount();

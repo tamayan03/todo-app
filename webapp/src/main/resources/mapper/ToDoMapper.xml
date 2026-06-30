@@ -20,6 +20,27 @@
 			delete_flag AS deleteFlag
         FROM todos
         WHERE delete_flag = 0
+        
+        <choose>
+
+    <when test="sort == 'due'">
+        ORDER BY due_date ASC NULLS LAST
+    </when>
+
+    <when test="sort == 'title'">
+        ORDER BY todo ASC
+    </when>
+
+    <when test="sort == 'completed'">
+        ORDER BY is_completed ASC,
+                 created_at DESC
+    </when>
+
+    <otherwise>
+        ORDER BY created_at DESC
+    </otherwise>
+
+</choose>
 
     </select>
 
