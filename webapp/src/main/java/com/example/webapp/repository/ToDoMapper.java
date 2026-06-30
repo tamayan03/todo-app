@@ -13,7 +13,7 @@ public interface ToDoMapper {
     /**
      * すべての「すること」を取得
      */
-    List<ToDo> selectAll();
+	List<ToDo> selectAll(String sort);
 
     /**
      * 指定されたIDに対応する「すること」を取得

@@ -25,11 +25,11 @@ public class ToDoServiceImpl implements ToDoService {
     private static final Logger logger = LoggerFactory.getLogger(ToDoServiceImpl.class);
 
     @Override
-    public List<ToDo> findAllToDo() {
+    public List<ToDo> findAllToDo(String sort) {
 
         logger.info("ToDo一覧取得開始");
 
-        List<ToDo> todos = toDoMapper.selectAll();
+        List<ToDo> todos = toDoMapper.selectAll(sort);
 
         logger.info("ToDo一覧取得終了 件数={}", todos.size());
 

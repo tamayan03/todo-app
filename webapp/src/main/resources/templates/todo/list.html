@@ -199,6 +199,39 @@ button:hover{
         </button>
 
     </form>
+	
+	<form th:action="@{/todos}"
+	      method="get"
+	      class="search-area">
+
+	    <label style="line-height:40px;">
+	        並び替え：
+	    </label>
+
+	    <select
+	        name="sort"
+	        onchange="this.form.submit()">
+
+	        <option value="">登録順</option>
+
+	        <option value="due"
+	                th:selected="${sort == 'due'}">
+	            締切日が近い順
+	        </option>
+
+	        <option value="title"
+	                th:selected="${sort == 'title'}">
+	            タイトル順
+	        </option>
+
+	        <option value="completed"
+	                th:selected="${sort == 'completed'}">
+	            未完了優先
+	        </option>
+
+	    </select>
+
+	</form>
 
     <!-- 🐠タスク水族館 -->
 
