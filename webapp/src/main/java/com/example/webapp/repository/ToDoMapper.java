@@ -41,6 +41,13 @@ public interface ToDoMapper {
     List<ToDo> selectByTodo(@Param("keyword") String keyword);
     
     /**
+     * タイトル・カテゴリ検索
+     */
+    List<ToDo> search(
+            @Param("keyword") String keyword,
+            @Param("category") String category);
+    
+    /**
      * 達成済み件数を取得
      */
     int getCompletedCount();

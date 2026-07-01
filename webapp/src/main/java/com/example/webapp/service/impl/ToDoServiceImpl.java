@@ -127,5 +127,19 @@ public class ToDoServiceImpl implements ToDoService {
 
         return duplicateTodo;
     }
+    
+    @Override
+    public List<ToDo> search(
+            String keyword,
+            String category) {
+
+        logger.info("検索開始 keyword={}, category={}", keyword, category);
+
+        List<ToDo> todos = toDoMapper.search(keyword, category);
+
+        logger.info("検索終了 件数={}", todos.size());
+
+        return todos;
+    }
 
 }
