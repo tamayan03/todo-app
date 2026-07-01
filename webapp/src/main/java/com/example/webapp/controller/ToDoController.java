@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.webapp.entity.ToDo;
 import com.example.webapp.form.ToDoForm;
+import com.example.webapp.form.ToDoSearchForm;
 import com.example.webapp.helper.ToDoHelper;
 import com.example.webapp.service.ToDoService;
 
@@ -33,25 +34,18 @@ public class ToDoController {
     
     @GetMapping("/search")
     public String search(
-            String keyword,
-            String category,
+            ToDoSearchForm searchForm,
             Model model) {
 
-        logger.info("タイトル検索開始 keyword={}", keyword);
+    	logger.info("検索開始");
 
-        model.addAttribute(
-                "todos",
-                toDoService.search(keyword, category));
+    	model.addAttribute(
+    	        "todos",
+    	        toDoService.search(searchForm));
 
-        model.addAttribute(
-                "keyword",
-                keyword);
+    	model.addAttribute("searchForm", searchForm);
 
-        model.addAttribute(
-                "category",
-                category);
-
-        logger.info("タイトル検索終了");
+        logger.info("検索終了");
 
         return "todo/list";
     }
@@ -84,6 +78,8 @@ public class ToDoController {
                 createAquarium(completedCount));
         
         logger.info("ToDo一覧表示終了");
+        
+        model.addAttribute("searchForm", new ToDoSearchForm());
 
         return "todo/list";
     }

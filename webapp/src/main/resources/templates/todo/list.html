@@ -189,16 +189,16 @@ button:hover{
     <h2>ToDo一覧</h2>
 
 	<form th:action="@{/todos/search}"
+	      th:object="${searchForm}"
 	      method="get"
 	      class="search-area">
 
-	    <input
-	        type="text"
-	        name="keyword"
-	        placeholder="タイトル検索"
-	        th:value="${keyword}">
+		  <input
+		      type="text"
+		      th:field="*{keyword}"
+		      placeholder="タイトル検索">
 
-	    <select name="category">
+	    <select th:field="*{category}">
 
 	        <option value="">すべて</option>
 
@@ -228,6 +228,28 @@ button:hover{
 	        </option>
 
 	    </select>
+		
+		<select th:field="*{isCompleted}">
+			
+			<label>締切日</label>
+
+			<input
+			    type="date"
+			    th:field="*{fromDate}">
+
+			<span>～</span>
+
+			<input
+			    type="date"
+			    th:field="*{toDate}">
+
+		    <option value="">すべて</option>
+
+		    <option th:value="false">未完了</option>
+
+		    <option th:value="true">完了</option>
+
+		</select>
 
 	    <button type="submit">
 

@@ -3,6 +3,7 @@ package com.example.webapp.service;
 import java.util.List;
 
 import com.example.webapp.entity.ToDo;
+import com.example.webapp.form.ToDoSearchForm;
 
 public interface ToDoService {
 
@@ -33,8 +34,10 @@ public interface ToDoService {
 
     List<ToDo> findByTodo(String keyword);
 
-    /** タイトル・カテゴリ検索 */
-    List<ToDo> search(String keyword, String category);
+    /**
+     * 検索
+     */
+    List<ToDo> search(ToDoSearchForm searchForm);
     
     void complete(Integer id);
     

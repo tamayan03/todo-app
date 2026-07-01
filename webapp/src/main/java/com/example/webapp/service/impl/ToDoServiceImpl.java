@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.webapp.entity.ToDo;
+import com.example.webapp.form.ToDoSearchForm;
 import com.example.webapp.repository.ToDoMapper;
 import com.example.webapp.service.ToDoService;
 
@@ -129,13 +130,11 @@ public class ToDoServiceImpl implements ToDoService {
     }
     
     @Override
-    public List<ToDo> search(
-            String keyword,
-            String category) {
+    public List<ToDo> search(ToDoSearchForm searchForm) {
 
-        logger.info("検索開始 keyword={}, category={}", keyword, category);
+        logger.info("検索開始");
 
-        List<ToDo> todos = toDoMapper.search(keyword, category);
+        List<ToDo> todos = toDoMapper.search(searchForm);
 
         logger.info("検索終了 件数={}", todos.size());
 
