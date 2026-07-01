@@ -14,7 +14,10 @@ public interface ToDoMapper {
 	/**
 	 * すべての「すること」を取得
 	 */
-	List<ToDo> selectAll(String sort);
+	List<ToDo> selectAll(
+			@Param("sort") String sort,
+			@Param("offset") Integer offset,
+			@Param("size") Integer size);
 
 	/**
 	 * 指定されたIDに対応する「すること」を取得

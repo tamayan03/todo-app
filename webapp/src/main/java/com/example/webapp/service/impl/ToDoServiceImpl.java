@@ -19,126 +19,137 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ToDoServiceImpl implements ToDoService {
 
-    /** DI */
-    private final ToDoMapper toDoMapper;
+	/** DI */
+	private final ToDoMapper toDoMapper;
 
-    /** ロガー */
-    private static final Logger logger = LoggerFactory.getLogger(ToDoServiceImpl.class);
+	/** ロガー */
+	private static final Logger logger = LoggerFactory.getLogger(ToDoServiceImpl.class);
 
-    @Override
-    public List<ToDo> findAllToDo(String sort) {
+	@Override
+	public List<ToDo> findAllToDo(String sort, Integer page) {
 
-        logger.info("ToDo一覧取得開始");
+		logger.info("ToDo一覧取得開始 page={}", page);
 
-        List<ToDo> todos = toDoMapper.selectAll(sort);
+		// pageがnullの場合は1ページ目
+		if (page == null || page < 1) {
+			page = 1;
+		}
 
-        logger.info("ToDo一覧取得終了 件数={}", todos.size());
+		int size = 10;
+		int offset = (page - 1) * size;
 
-        return todos;
-    }
+		List<ToDo> todos = toDoMapper.selectAll(
+				sort,
+				offset,
+				size);
 
-    @Override
-    public ToDo findByIdToDo(Integer id) {
+		logger.info("ToDo一覧取得終了 件数={}", todos.size());
 
-        logger.info("ToDo取得開始 id={}", id);
+		return todos;
+	}
 
-        ToDo todo = toDoMapper.selectById(id);
+	@Override
+	public ToDo findByIdToDo(Integer id) {
 
-        logger.info("ToDo取得終了 id={}", id);
+		logger.info("ToDo取得開始 id={}", id);
 
-        return todo;
-    }
+		ToDo todo = toDoMapper.selectById(id);
 
-    @Override
-    public void insertToDo(ToDo toDo) {
+		logger.info("ToDo取得終了 id={}", id);
 
-        logger.info("ToDo登録開始 title={}", toDo.getTodo());
+		return todo;
+	}
 
-        toDoMapper.insert(toDo);
+	@Override
+	public void insertToDo(ToDo toDo) {
 
-        logger.info("ToDo登録終了");
-    }
+		logger.info("ToDo登録開始 title={}", toDo.getTodo());
 
-    @Override
-    public void updateToDo(ToDo toDo) {
+		toDoMapper.insert(toDo);
 
-        logger.info("ToDo更新開始 id={}", toDo.getId());
+		logger.info("ToDo登録終了");
+	}
 
-        toDoMapper.update(toDo);
+	@Override
+	public void updateToDo(ToDo toDo) {
 
-        logger.info("ToDo更新終了 id={}", toDo.getId());
-    }
+		logger.info("ToDo更新開始 id={}", toDo.getId());
 
-    @Override
-    public void deleteToDo(Integer id) {
+		toDoMapper.update(toDo);
 
-        logger.info("ToDo削除開始 id={}", id);
+		logger.info("ToDo更新終了 id={}", toDo.getId());
+	}
 
-        toDoMapper.delete(id);
+	@Override
+	public void deleteToDo(Integer id) {
 
-        logger.info("ToDo削除終了 id={}", id);
-    }
+		logger.info("ToDo削除開始 id={}", id);
 
-    @Override
-    public List<ToDo> findByTodo(String keyword) {
+		toDoMapper.delete(id);
 
-        logger.info("タイトル検索開始 keyword={}", keyword);
+		logger.info("ToDo削除終了 id={}", id);
+	}
 
-        List<ToDo> todos = toDoMapper.selectByTodo(keyword);
+	@Override
+	public List<ToDo> findByTodo(String keyword) {
 
-        logger.info("タイトル検索終了 件数={}", todos.size());
+		logger.info("タイトル検索開始 keyword={}", keyword);
 
-        return todos;
-    }
+		List<ToDo> todos = toDoMapper.selectByTodo(keyword);
 
-    @Override
-    public void complete(Integer id) {
+		logger.info("タイトル検索終了 件数={}", todos.size());
 
-        logger.info("完了処理開始 id={}", id);
+		return todos;
+	}
 
-        ToDo todo = toDoMapper.selectById(id);
+	@Override
+	public void complete(Integer id) {
 
-        todo.setIsCompleted(true);
+		logger.info("完了処理開始 id={}", id);
 
-        toDoMapper.update(todo);
+		ToDo todo = toDoMapper.selectById(id);
 
-        logger.info("完了処理終了 id={}", id);
-    }
+		todo.setIsCompleted(true);
 
-    @Override
-    public int getCompletedCount() {
+		toDoMapper.update(todo);
 
-        logger.info("完了件数取得開始");
+		logger.info("完了処理終了 id={}", id);
+	}
 
-        int count = toDoMapper.getCompletedCount();
+	@Override
+	public int getCompletedCount() {
 
-        logger.info("完了件数取得終了 件数={}", count);
+		logger.info("完了件数取得開始");
 
-        return count;
-    }
-    
-    @Override
-    public ToDo findDuplicateTodo(String todo) {
+		int count = toDoMapper.getCompletedCount();
 
-        logger.info("タイトル重複チェック開始 title={}", todo);
+		logger.info("完了件数取得終了 件数={}", count);
 
-        ToDo duplicateTodo = toDoMapper.selectDuplicateTodo(todo);
+		return count;
+	}
 
-        logger.info("タイトル重複チェック終了");
+	@Override
+	public ToDo findDuplicateTodo(String todo) {
 
-        return duplicateTodo;
-    }
-    
-    @Override
-    public List<ToDo> search(ToDoSearchForm searchForm) {
+		logger.info("タイトル重複チェック開始 title={}", todo);
 
-        logger.info("検索開始");
+		ToDo duplicateTodo = toDoMapper.selectDuplicateTodo(todo);
 
-        List<ToDo> todos = toDoMapper.search(searchForm);
+		logger.info("タイトル重複チェック終了");
 
-        logger.info("検索終了 件数={}", todos.size());
+		return duplicateTodo;
+	}
 
-        return todos;
-    }
+	@Override
+	public List<ToDo> search(ToDoSearchForm searchForm) {
+
+		logger.info("検索開始");
+
+		List<ToDo> todos = toDoMapper.search(searchForm);
+
+		logger.info("検索終了 件数={}", todos.size());
+
+		return todos;
+	}
 
 }

@@ -20,6 +20,7 @@
 		category AS category,
 		delete_flag AS deleteFlag
 		FROM todos
+
 		WHERE delete_flag = 0
 
 		<choose>
@@ -42,6 +43,10 @@
 			</otherwise>
 
 		</choose>
+
+		LIMIT #{size}
+
+		OFFSET #{offset}
 
 	</select>
 
