@@ -32,6 +32,9 @@ public class ToDo {
 
 	/** 締切日 */
 	private LocalDate dueDate;
+	
+	/** カテゴリ */
+	private String category;
 
 	/** 削除フラグ（0:有効 1:削除） */
 	private Integer deleteFlag;

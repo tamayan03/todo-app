@@ -5,157 +5,196 @@
 
 <mapper namespace="com.example.webapp.repository.ToDoMapper">
 
-    <!-- 全件検索 -->
-    <select id="selectAll"
-            resultType="com.example.webapp.entity.ToDo">
+	<!-- 全件検索 -->
+	<select id="selectAll"
+		resultType="com.example.webapp.entity.ToDo">
 
-        SELECT
-            id,
-            todo,
-            detail,
-            created_at AS createdAt,
-            updated_at AS updatedAt,
-            is_completed AS isCompleted,
-			due_date AS dueDate,
-			delete_flag AS deleteFlag
-        FROM todos
-        WHERE delete_flag = 0
+		SELECT
+		id,
+		todo,
+		detail,
+		created_at AS createdAt,
+		updated_at AS updatedAt,
+		is_completed AS isCompleted,
+		due_date AS dueDate,
+		category AS category,
+		delete_flag AS deleteFlag
+		FROM todos
+		WHERE delete_flag = 0
 
-    </select>
+		<choose>
 
-    <!-- 1件検索 -->
-    <select id="selectById"
-        resultType="com.example.webapp.entity.ToDo">
+			<when test="sort == 'due'">
+				ORDER BY due_date ASC NULLS LAST
+			</when>
 
-    SELECT
-        id,
-        todo,
-        detail,
-        created_at AS createdAt,
-        updated_at AS updatedAt,
-        is_completed AS isCompleted,
-        due_date AS dueDate,
-        delete_flag AS deleteFlag
-    FROM todos
+			<when test="sort == 'title'">
+				ORDER BY todo ASC
+			</when>
 
-    WHERE id = #{id}
-      AND delete_flag = 0
+			<when test="sort == 'completed'">
+				ORDER BY is_completed ASC,
+				created_at DESC
+			</when>
 
-</select>
+			<otherwise>
+				ORDER BY created_at DESC
+			</otherwise>
 
-    <!-- 登録 -->
-    <insert id="insert">
+		</choose>
 
-        INSERT INTO todos
-        (
-            todo,
-            detail,
-            created_at,
-            updated_at,
-            is_completed,
-            due_date,
-            delete_flag
-        )
+	</select>
 
-        VALUES
-        (
-            #{todo},
-            #{detail},
-            CURRENT_TIMESTAMP,
-            CURRENT_TIMESTAMP,
-            false,
-            #{dueDate},
-            0
-        )
+	<!-- 1件検索 -->
+	<select id="selectById"
+		resultType="com.example.webapp.entity.ToDo">
 
-    </insert>
+		SELECT
+		id,
+		todo,
+		detail,
+		created_at AS createdAt,
+		updated_at AS
+		updatedAt,
+		is_completed AS isCompleted,
+		due_date AS dueDate,
+		category AS
+		category,
+		delete_flag AS deleteFlag
+		FROM todos
 
-    <!-- 更新 -->
-    <update id="update">
+		WHERE id = #{id}
+		AND
+		delete_flag = 0
 
-        UPDATE todos
+	</select>
 
-        SET
-            todo = #{todo},
-            detail = #{detail},
-            is_completed = #{isCompleted},           
-            due_date = #{dueDate},
-            delete_flag = #{deleteFlag},
-            updated_at = CURRENT_TIMESTAMP
-        WHERE id = #{id}
+	<!-- 登録 -->
+	<insert id="insert">
 
-    </update>
+		INSERT INTO todos
+		(
+		todo,
+		detail,
+		created_at,
+		updated_at,
+		is_completed,
+		due_date,
+		category,
+		delete_flag
+		)
 
-    <!-- 削除 -->
-    <update id="delete">
+		VALUES
+		(
+		#{todo},
+		#{detail},
+		CURRENT_TIMESTAMP,
+		CURRENT_TIMESTAMP,
+		false,
+		#{dueDate},
+		#{category},
+		0
+		)
 
-    UPDATE todos
+	</insert>
 
-    SET
-        delete_flag = 1,
-        updated_at = CURRENT_TIMESTAMP
+	<!-- 更新 -->
+	<update id="update">
 
-    	WHERE id = #{id}
+		UPDATE todos
+
+		SET
+		todo = #{todo},
+		detail = #{detail},
+		is_completed = #{isCompleted},
+		due_date = #{dueDate},
+		category = #{category},
+		delete_flag = #{deleteFlag},
+		updated_at = CURRENT_TIMESTAMP
+
+		WHERE id = #{id}
 
 	</update>
 
-    <!-- タイトル検索 -->
-    <select id="selectByTodo"
-            resultType="com.example.webapp.entity.ToDo">
+	<!-- 削除 -->
+	<update id="delete">
 
-        SELECT
-            id,
-            todo,
-            detail,
-            created_at AS createdAt,
-            updated_at AS updatedAt,
-            is_completed AS isCompleted,            
-            due_date AS dueDate,
-            delete_flag AS deleteFlag
+		UPDATE todos
 
-        FROM todos
+		SET
+		delete_flag = 1,
+		updated_at =
+		CURRENT_TIMESTAMP
 
-        WHERE todo LIKE '%' || #{keyword} || '%'
-        AND delete_flag = 0
+		WHERE id = #{id}
 
-    </select>
-    
-    <!-- 達成済み件数取得 -->
-<select id="getCompletedCount"
-        resultType="int">
+	</update>
 
-    SELECT COUNT(*)
+	<!-- タイトル検索 -->
+	<select id="selectByTodo"
+		resultType="com.example.webapp.entity.ToDo">
 
-    FROM todos
+		SELECT
+		id,
+		todo,
+		detail,
+		created_at AS createdAt,
+		updated_at AS
+		updatedAt,
+		is_completed AS isCompleted,
+		due_date AS dueDate,
+		category AS
+		category,
+		delete_flag
+		AS deleteFlag
 
-    WHERE is_completed = true
-    AND delete_flag = 0
+		FROM todos
 
-</select>
+		WHERE todo LIKE '%' ||
+		#{keyword} || '%'
+		AND
+		delete_flag = 0
 
-<!-- タイトル重複チェック -->
-<select id="selectDuplicateTodo"
-        resultType="com.example.webapp.entity.ToDo">
+	</select>
 
-    SELECT
-        id,
-        todo,
-        detail,
-        created_at AS createdAt,
-        updated_at AS updatedAt,
-        is_completed AS isCompleted,
-        due_date AS dueDate,
-        delete_flag AS deleteFlag
+	<!-- 達成済み件数取得 -->
+	<select id="getCompletedCount" resultType="int">
 
-    FROM todos
+		SELECT COUNT(*)
 
-    WHERE todo = #{todo}
-      AND is_completed = false
-      AND delete_flag = 0
+		FROM
+		todos
 
-    LIMIT 1
+		WHERE is_completed = true
+		AND delete_flag = 0
 
-</select>
+	</select>
+
+	<!-- タイトル重複チェック -->
+	<select id="selectDuplicateTodo"
+		resultType="com.example.webapp.entity.ToDo">
+
+		SELECT
+		id,
+		todo,
+		detail,
+		created_at AS createdAt,
+		updated_at AS
+		updatedAt,
+		is_completed AS isCompleted,
+		due_date AS dueDate,
+		delete_flag
+		AS deleteFlag
+
+		FROM todos
+
+		WHERE todo = #{todo}
+		AND is_completed = false
+		AND delete_flag = 0
+
+		LIMIT 1
+
+	</select>
 
 <!-- タイトル・カテゴリ検索 -->
 <select id="search"
