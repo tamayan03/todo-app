@@ -48,6 +48,12 @@ h2{
     border-radius:8px;
 }
 
+.search-area select{
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
 .search-area button{
     padding:10px 20px;
     border:none;
@@ -182,54 +188,53 @@ button:hover{
 
     <h2>ToDo一覧</h2>
 
-    <form th:action="@{/todos/search}"
-          method="get"
-          class="search-area">
-
-        <input
-            type="text"
-            name="keyword"
-            placeholder="タイトル検索"
-            th:value="${keyword}">
-
-        <button type="submit">
-
-            検索
-
-        </button>
-
-    </form>
-	
-	<form th:action="@{/todos}"
+	<form th:action="@{/todos/search}"
 	      method="get"
 	      class="search-area">
 
-	    <label style="line-height:40px;">
-	        並び替え：
-	    </label>
+	    <input
+	        type="text"
+	        name="keyword"
+	        placeholder="タイトル検索"
+	        th:value="${keyword}">
 
-	    <select
-	        name="sort"
-	        onchange="this.form.submit()">
+	    <select name="category">
 
-	        <option value="">登録順</option>
+	        <option value="">すべて</option>
 
-	        <option value="due"
-	                th:selected="${sort == 'due'}">
-	            締切日が近い順
+	        <option value="仕事"
+	                th:selected="${category == '仕事'}">
+	            仕事
 	        </option>
 
-	        <option value="title"
-	                th:selected="${sort == 'title'}">
-	            タイトル順
+	        <option value="勉強"
+	                th:selected="${category == '勉強'}">
+	            勉強
 	        </option>
 
-	        <option value="completed"
-	                th:selected="${sort == 'completed'}">
-	            未完了優先
+	        <option value="買い物"
+	                th:selected="${category == '買い物'}">
+	            買い物
+	        </option>
+
+	        <option value="プライベート"
+	                th:selected="${category == 'プライベート'}">
+	            プライベート
+	        </option>
+
+	        <option value="その他"
+	                th:selected="${category == 'その他'}">
+	            その他
 	        </option>
 
 	    </select>
+
+	    <button type="submit">
+
+	        検索
+
+	    </button>
+
 
 	</form>
 

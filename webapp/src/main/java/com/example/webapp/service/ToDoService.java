@@ -31,10 +31,10 @@ public interface ToDoService {
      */
     void deleteToDo(Integer id);
 
-    /**
-     * タイトル検索
-     */
     List<ToDo> findByTodo(String keyword);
+
+    /** タイトル・カテゴリ検索 */
+    List<ToDo> search(String keyword, String category);
     
     void complete(Integer id);
     

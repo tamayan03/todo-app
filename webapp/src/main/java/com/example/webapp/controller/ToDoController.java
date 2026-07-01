@@ -34,18 +34,23 @@ public class ToDoController {
     @GetMapping("/search")
     public String search(
             String keyword,
+            String category,
             Model model) {
-    	
-    	logger.info("タイトル検索開始 keyword={}", keyword);
+
+        logger.info("タイトル検索開始 keyword={}", keyword);
 
         model.addAttribute(
                 "todos",
-                toDoService.findByTodo(keyword));
-        
+                toDoService.search(keyword, category));
+
         model.addAttribute(
                 "keyword",
                 keyword);
-        
+
+        model.addAttribute(
+                "category",
+                category);
+
         logger.info("タイトル検索終了");
 
         return "todo/list";
