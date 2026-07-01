@@ -54,17 +54,28 @@ public class ToDoController {
      * 一覧表示
      */
     @GetMapping
-    public String list(String sort,Model model) {
+    public String list(
+            String sort,
+            Integer page,
+            Model model) {
+    	
+    	if (page == null || page < 1) {
+    	    page = 1;
+    	}
     	
     	logger.info("ToDo一覧表示開始");
 
         model.addAttribute(
             "todos",
-            toDoService.findAllToDo(sort));
+            toDoService.findAllToDo(sort, page));
         
         model.addAttribute(
                 "sort",
                 sort);
+        model.addAttribute("prevPage", page - 1);
+        model.addAttribute("nextPage", page + 1);
+        
+        model.addAttribute("page", page);
 
         int completedCount =
                 toDoService.getCompletedCount();

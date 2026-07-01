@@ -21,5 +21,11 @@ public class ToDoSearchForm {
 
     /** 締切日To */
     private LocalDate toDate;
+    
+    /** ページ番号 */
+    private Integer page = 1;
+    
+    /** 1ページの表示件数 */
+    private Integer size = 10;
 
 }

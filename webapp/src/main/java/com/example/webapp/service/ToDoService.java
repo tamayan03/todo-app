@@ -10,7 +10,9 @@ public interface ToDoService {
     /**
      * 全「すること」を検索
      */
-	List<ToDo> findAllToDo(String sort);
+	List<ToDo> findAllToDo(
+	        String sort,
+	        Integer page);
 
     /**
      * 指定されたIDの「すること」を検索
